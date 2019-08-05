@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:todo/pages/criarConta.page.dart';
+import 'package:todo/pages/login.page.dart';
 
-class LoginPage extends StatefulWidget {
-  final String title = "Login";
-
-  State<StatefulWidget> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
+class CriarContaPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
               child: SizedBox.expand(
                 child: FlatButton(
                   child: Text(
-                    "Login",
+                    "Salvar",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -98,14 +92,12 @@ class _LoginPageState extends State<LoginPage> {
               height: 40,
               child: FlatButton(
                 child: Text(
-                  "Cadastre-se",
+                  "Ja possuí uma conta? Fazer login",
                   textAlign: TextAlign.center,
                 ),
                 onPressed: () => {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CriarContaPage())),
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => LoginPage())),
                 },
               ),
             ),
