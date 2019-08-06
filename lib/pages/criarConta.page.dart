@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:todo/pages/login.page.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+final db = FirebaseDatabase.instance.reference();
 
 class CriarContaPage extends StatelessWidget {
+ final _login= TextEditingController();
+ final _senha= TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,8 +28,9 @@ class CriarContaPage extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            TextFormField(
+            TextField(
               keyboardType: TextInputType.emailAddress,
+              controller: _login,
               decoration: InputDecoration(
                 labelText: "Login",
                 labelStyle: TextStyle(
@@ -36,9 +43,10 @@ class CriarContaPage extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            TextFormField(
+            TextField(
               keyboardType: TextInputType.text,
               obscureText: true,
+              controller: _senha,
               decoration: InputDecoration(
                 labelText: "Senha",
                 labelStyle: TextStyle(
@@ -78,7 +86,9 @@ class CriarContaPage extends StatelessWidget {
                       fontSize: 20,
                     ),
                   ),
-                  onPressed: () => {},
+                  onPressed: () {
+                    teste();
+                  },
                 ),
               ),
             ),
@@ -105,5 +115,9 @@ class CriarContaPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void teste() {
+    db.child('usuarios').push().set({'login': _login.text, 'senha': _senha.text, 'admin': 2});
   }
 }
