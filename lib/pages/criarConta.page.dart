@@ -28,7 +28,7 @@ class CriarContaPage extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            TextField(
+            TextFormField(
               keyboardType: TextInputType.emailAddress,
               controller: _login,
               decoration: InputDecoration(
@@ -43,7 +43,7 @@ class CriarContaPage extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            TextField(
+            TextFormField(
               keyboardType: TextInputType.text,
               obscureText: true,
               controller: _senha,
@@ -118,6 +118,6 @@ class CriarContaPage extends StatelessWidget {
   }
 
   void teste() {
-    db.child('usuarios').push().set({'login': _login.text, 'senha': _senha.text, 'admin': 2});
+    db.child('usuarios').push().set({'login': _login.text, 'senha': _senha.text, 'admin': 0});
   }
 }

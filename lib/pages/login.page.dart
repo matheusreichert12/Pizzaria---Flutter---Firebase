@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/pages/criarConta.page.dart';
+import 'package:todo/pages/inicialCliente.page.dart';
 
 class LoginPage extends StatefulWidget {
   final String title = "Login";
@@ -84,7 +85,12 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: 20,
                     ),
                   ),
-                  onPressed: () => {},
+                  onPressed: () => {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => InicialClientePage())),
+                  },
                 ),
               ),
             ),
