@@ -1,15 +1,8 @@
-
 import 'package:flutter/material.dart';
 
-class ClientePage extends StatefulWidget {
-  @override
-  _ClientePageState createState() => _ClientePageState();
-}
-
-class _ClientePageState extends State<ClientePage> {
-
-  
-
+class ClientePage extends StatelessWidget {
+  ClientePage({this.title});
+  final String title;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +13,7 @@ class _ClientePageState extends State<ClientePage> {
             height: 20,
           ),
           Text(
-            "Dados Pessoais",
+            this.title,
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 30),
           ),
@@ -48,7 +41,7 @@ class _ClientePageState extends State<ClientePage> {
               ),
             ),
           ),
-           SizedBox(
+          SizedBox(
             height: 10,
           ),
           Padding(

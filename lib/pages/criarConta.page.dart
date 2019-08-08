@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/pages/login.page.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -5,9 +6,9 @@ import 'package:firebase_database/firebase_database.dart';
 final db = FirebaseDatabase.instance.reference();
 
 class CriarContaPage extends StatelessWidget {
- final _login= TextEditingController();
- final _senha= TextEditingController();
-
+  final _login = TextEditingController();
+  final _senha = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,34 +29,54 @@ class CriarContaPage extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              controller: _login,
-              decoration: InputDecoration(
-                labelText: "Login",
-                labelStyle: TextStyle(
-                    color: Colors.black38,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 20),
-              ),
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.text,
-              obscureText: true,
-              controller: _senha,
-              decoration: InputDecoration(
-                labelText: "Senha",
-                labelStyle: TextStyle(
-                    color: Colors.black38,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 20),
-              ),
-              style: TextStyle(fontSize: 20),
-            ),
+            Form(
+                autovalidate: false,
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    TextFormField(
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _login,
+                      decoration: InputDecoration(
+                        labelText: "Login",
+                        labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20),
+                      ),
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter some text';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
+                      controller: _senha,
+                      decoration: InputDecoration(
+                        labelText: "Senha",
+                        labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20),
+                      ),
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ],
+                )),
             SizedBox(
               height: 40,
             ),
@@ -87,7 +108,26 @@ class CriarContaPage extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    teste();
+                    if (_formKey.currentState.validate()) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            content: new Text("Usuário salvo com sucesso"),
+                            actions: <Widget>[
+                              // define os botões na base do dialogo
+                              new FlatButton(
+                                child: new Text("Fechar"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      salvarConta();
+                    }
                   },
                 ),
               ),
@@ -117,7 +157,18 @@ class CriarContaPage extends StatelessWidget {
     );
   }
 
-  void teste() {
-    db.child('usuarios').push().set({'login': _login.text, 'senha': _senha.text, 'admin': 0});
+  void salvarConta() {
+    Firestore.instance.collection("usuarios").document().setData({
+      'login': _login.text,
+      'senha': _senha.text,
+      'admin': 0,
+      'nome': '',
+      'telefone': '',
+      'email': '',
+      'cidade': '',
+      'bairro': '',
+      'rua': '',
+      'n': ''
+    });
   }
 }

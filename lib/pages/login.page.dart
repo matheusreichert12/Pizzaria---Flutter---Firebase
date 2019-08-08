@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/pages/criarConta.page.dart';
 import 'package:todo/pages/inicialCliente.page.dart';
+import 'package:todo/pages/inicialEmpresa.page.dart';
 
 class LoginPage extends StatefulWidget {
   final String title = "Login";
@@ -9,6 +11,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _login = TextEditingController();
+  final _senha = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             TextFormField(
               keyboardType: TextInputType.emailAddress,
+              controller: _login,
               decoration: InputDecoration(
                 labelText: "Login",
                 labelStyle: TextStyle(
@@ -46,6 +52,7 @@ class _LoginPageState extends State<LoginPage> {
             TextFormField(
               keyboardType: TextInputType.text,
               obscureText: true,
+              controller: _senha,
               decoration: InputDecoration(
                 labelText: "Senha",
                 labelStyle: TextStyle(
@@ -85,11 +92,8 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: 20,
                     ),
                   ),
-                  onPressed: () => {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => InicialClientePage())),
+                  onPressed: () {
+                    verificaLogin();
                   },
                 ),
               ),
@@ -119,5 +123,26 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  verificaLogin() {
+    Firestore.instance
+        .collection("usuarios")
+        .where("login", isEqualTo: _login.text)
+        .where("senha", isEqualTo: _senha.text)
+        .getDocuments()
+        .then((QuerySnapshot docs) {
+      if (docs.documents.length != 0) {
+        if (docs.documents[0].data['adm'] == '1') {
+         Navigator.push(context,
+              MaterialPageRoute(builder: (context) => InicialEmpresaPage()));
+        } else {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => InicialClientePage()));
+        }
+      } else {
+        print("login e senha inválidos");
+      }
+    });
   }
 }

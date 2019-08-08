@@ -2,7 +2,6 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/pages/cliente.page.dart';
-import 'package:todo/pages/login.page.dart';
 import 'package:todo/pages/pedidoCliente.page.dart';
 
 class InicialClientePage extends StatefulWidget {
@@ -12,18 +11,15 @@ class InicialClientePage extends StatefulWidget {
 class InicialClientePageState extends State<InicialClientePage> {
   int _pageIndex = 0;
 
-  final ClientePage _clientePage = ClientePage();
-  final PedidoClientePage _pedidoClientePage = PedidoClientePage();
-
-  Widget _showPage = new ClientePage();
+  Widget _showPage = new PedidoClientePage();
 
   Widget _pageChooser(int page) {
     switch (page) {
       case 0:
-        return _clientePage;
+        return PedidoClientePage();
         break;
       case 1:
-        return _pedidoClientePage;
+        return ClientePage(title: 'asd123');
         break;
       default:
         return new Container(
@@ -39,12 +35,10 @@ class InicialClientePageState extends State<InicialClientePage> {
       bottomNavigationBar: CurvedNavigationBar(
         initialIndex: _pageIndex,
         items: <Widget>[
-          Icon(Icons.perm_identity, size: 30,color: Colors.white),
-          Icon(Icons.local_pizza, size: 30,color: Colors.white),
-          Icon(Icons.exit_to_app, size: 30,color: Colors.white),
-          
+          Icon(Icons.local_pizza, size: 30, color: Colors.white),
+          Icon(Icons.perm_identity, size: 30, color: Colors.white),
+          Icon(Icons.exit_to_app, size: 30, color: Colors.white),
         ],
-        
         color: Colors.redAccent[400],
         backgroundColor: Colors.white,
         animationCurve: Curves.easeInOut,

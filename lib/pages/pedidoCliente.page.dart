@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 class PedidoClientePage extends StatefulWidget {
   @override
   _PedidoClientePageState createState() => _PedidoClientePageState();
-}
-
-class _PedidoClientePageState extends State<PedidoClientePage> {
+}class _PedidoClientePageState extends State<PedidoClientePage> {
   String teste;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +15,7 @@ class _PedidoClientePageState extends State<PedidoClientePage> {
         title: Text("Testando FireStore"),
       ),
       body: new StreamBuilder(
-        stream: Firestore.instance.collection("usuarios").snapshots(),
+        stream: getData(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return new Text("Conectando...");
@@ -33,8 +32,7 @@ class _PedidoClientePageState extends State<PedidoClientePage> {
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: () {
-          update(teste, {'login': 'teste2', 'senha': 'oktiu', 'adm': '3'});
-          //Firestore.instance.collection("usuarios").document().delete();
+          update(teste, {'login': 'teste', 'senha': 'teste', 'adm': '1'});
         },
         tooltip: 'Icrement',
         child: new Icon(Icons.add),
@@ -42,17 +40,14 @@ class _PedidoClientePageState extends State<PedidoClientePage> {
     );
   }
 
-  getData() async {
+  getData() {
     return Firestore.instance.collection("usuarios").snapshots();
   }
 
   void update(selectDoc, newValues) {
+
     Firestore.instance
         .collection("usuarios")
-        .document(selectDoc)
-        .setData(newValues)
-        .catchError((e) {
-      print(e);
-    });
+        .document().setData(newValues);
   }
 }
