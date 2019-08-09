@@ -5,10 +5,16 @@ import 'package:todo/pages/cliente.page.dart';
 import 'package:todo/pages/pedidoCliente.page.dart';
 
 class InicialClientePage extends StatefulWidget {
-  State<StatefulWidget> createState() => InicialClientePageState();
+  InicialClientePage({this.idDocument});
+  final String idDocument;
+  State<StatefulWidget> createState() =>
+      InicialClientePageState(idDocument: this.idDocument);
 }
 
 class InicialClientePageState extends State<InicialClientePage> {
+  InicialClientePageState({this.idDocument});
+  final String idDocument;
+
   int _pageIndex = 0;
 
   Widget _showPage = new PedidoClientePage();
@@ -19,7 +25,7 @@ class InicialClientePageState extends State<InicialClientePage> {
         return PedidoClientePage();
         break;
       case 1:
-        return ClientePage(title: 'asd123');
+        return ClientePage(idDocument: this.idDocument);
         break;
       default:
         return new Container(

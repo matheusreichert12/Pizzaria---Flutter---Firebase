@@ -134,14 +134,34 @@ class _LoginPageState extends State<LoginPage> {
         .then((QuerySnapshot docs) {
       if (docs.documents.length != 0) {
         if (docs.documents[0].data['adm'] == '1') {
-         Navigator.push(context,
+          Navigator.push(context,
               MaterialPageRoute(builder: (context) => InicialEmpresaPage()));
         } else {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => InicialClientePage()));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => InicialClientePage(
+                        idDocument: docs.documents[0].documentID,
+                      )));
         }
       } else {
-        print("login e senha inválidos");
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: new Text("Login e senha inválidos"),
+              actions: <Widget>[
+                // define os botões na base do dialogo
+                new FlatButton(
+                  child: new Text("Ok"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
       }
     });
   }

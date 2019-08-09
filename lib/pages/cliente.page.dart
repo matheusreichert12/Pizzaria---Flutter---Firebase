@@ -1,8 +1,40 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as prefix0;
 import 'package:flutter/material.dart';
 
-class ClientePage extends StatelessWidget {
-  ClientePage({this.title});
-  final String title;
+class ClientePage extends StatefulWidget {
+  ClientePage({this.idDocument});
+  final String idDocument;
+  State<StatefulWidget> createState() =>
+      ClientePageState(idDocument: this.idDocument);
+}
+
+var nome = TextEditingController();
+
+class ClientePageState extends State<ClientePage> {
+  @override
+  initState() {
+    super.initState();
+    // Add listeners to this class
+    abrirTela();
+  }
+
+  abrirTela() {
+    Firestore.instance
+        .collection("usuarios")
+        .document(this.idDocument)
+        .snapshots()
+        .forEach((DocumentSnapshot docs) {
+      if (docs.data.length != 0) {
+        nome.text = docs.data['nome'];
+
+        //adicionar os outros campos
+      }
+    });
+  }
+
+  ClientePageState({this.idDocument});
+  final String idDocument;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +45,7 @@ class ClientePage extends StatelessWidget {
             height: 20,
           ),
           Text(
-            this.title,
+            "Dados Pessoais",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 30),
           ),
@@ -23,6 +55,7 @@ class ClientePage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
             child: TextField(
+              controller: nome,
               decoration: InputDecoration(
                 hintText: "Nome",
                 icon: Icon(Icons.person),
@@ -34,7 +67,7 @@ class ClientePage extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextField(
+            child: TextFormField(
               decoration: InputDecoration(
                 hintText: "Telefone",
                 icon: Icon(Icons.phone),
@@ -46,7 +79,7 @@ class ClientePage extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextField(
+            child: TextFormField(
               decoration: InputDecoration(
                 hintText: "E-mail",
                 icon: Icon(Icons.email),
@@ -58,7 +91,7 @@ class ClientePage extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextField(
+            child: TextFormField(
               decoration: InputDecoration(
                 hintText: "Cidade",
                 icon: Icon(Icons.location_city),
@@ -70,7 +103,7 @@ class ClientePage extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextField(
+            child: TextFormField(
               decoration: InputDecoration(
                 hintText: "Bairro",
                 icon: Icon(Icons.location_city),
@@ -82,7 +115,7 @@ class ClientePage extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextField(
+            child: TextFormField(
               decoration: InputDecoration(
                 hintText: "Rua",
                 icon: Icon(Icons.location_city),
@@ -94,7 +127,7 @@ class ClientePage extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextField(
+            child: TextFormField(
               decoration: InputDecoration(
                 hintText: "Nº",
                 icon: Icon(Icons.location_city),
