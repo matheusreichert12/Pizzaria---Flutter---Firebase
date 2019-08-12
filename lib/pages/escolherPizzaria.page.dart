@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/pages/pedidoCliente.page.dart';
 
 class EscolherPizzariaPage extends StatefulWidget {
   @override
@@ -113,7 +114,6 @@ class _EscolherPizzariaPageState extends State<EscolherPizzariaPage> {
                                   color: Colors.red),
                             ),
                             actions: <Widget>[
-                              // define os botões na base do dialogo
                               new FlatButton(
                                 child: new Text("OK"),
                                 onPressed: () {
@@ -124,6 +124,11 @@ class _EscolherPizzariaPageState extends State<EscolherPizzariaPage> {
                           );
                         },
                       );
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PedidoClientePage()));
                     }
                   },
                 ),

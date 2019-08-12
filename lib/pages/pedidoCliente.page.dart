@@ -1,8 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:todo/pages/cliente.page.dart';
-import 'package:todo/pages/criarConta.page.dart';
-import 'package:todo/pages/login.page.dart';
+import 'package:todo/pages/cardapioCliente.page.dart';
 
 class PedidoClientePage extends StatefulWidget {
   @override
@@ -10,7 +7,11 @@ class PedidoClientePage extends StatefulWidget {
 }
 
 int _currentIndex = 0;
-final List<Widget> _children = [ClientePage(), LoginPage(), CriarContaPage()];
+final List<Widget> _children = [
+  CardapioClientePage(),
+  CardapioClientePage(),
+  CardapioClientePage()
+];
 
 class _PedidoClientePageState extends State<PedidoClientePage> {
   String teste;
