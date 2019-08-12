@@ -10,6 +10,12 @@ class ClientePage extends StatefulWidget {
 }
 
 var nome = TextEditingController();
+var telefone = TextEditingController();
+var email = TextEditingController();
+var cidade = TextEditingController();
+var bairro = TextEditingController();
+var rua = TextEditingController();
+var n = TextEditingController();
 
 class ClientePageState extends State<ClientePage> {
   @override
@@ -27,6 +33,12 @@ class ClientePageState extends State<ClientePage> {
         .forEach((DocumentSnapshot docs) {
       if (docs.data.length != 0) {
         nome.text = docs.data['nome'];
+        telefone.text = docs.data['telefone'];
+        email.text = docs.data['email'];
+        cidade.text = docs.data['cidade'];
+        bairro.text = docs.data['bairro'];
+        rua.text = docs.data['rua'];
+        n.text = docs.data['n'];
 
         //adicionar os outros campos
       }
@@ -55,6 +67,7 @@ class ClientePageState extends State<ClientePage> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
             child: TextField(
+              keyboardType: TextInputType.text,
               controller: nome,
               decoration: InputDecoration(
                 hintText: "Nome",
@@ -67,7 +80,9 @@ class ClientePageState extends State<ClientePage> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextFormField(
+            child: TextField(
+              keyboardType: TextInputType.phone,
+              controller: telefone,
               decoration: InputDecoration(
                 hintText: "Telefone",
                 icon: Icon(Icons.phone),
@@ -79,7 +94,9 @@ class ClientePageState extends State<ClientePage> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextFormField(
+            child: TextField(
+              keyboardType: TextInputType.emailAddress,
+              controller: email,
               decoration: InputDecoration(
                 hintText: "E-mail",
                 icon: Icon(Icons.email),
@@ -91,7 +108,9 @@ class ClientePageState extends State<ClientePage> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextFormField(
+            child: TextField(
+              keyboardType: TextInputType.text,
+              controller: cidade,
               decoration: InputDecoration(
                 hintText: "Cidade",
                 icon: Icon(Icons.location_city),
@@ -103,7 +122,9 @@ class ClientePageState extends State<ClientePage> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextFormField(
+            child: TextField(
+              keyboardType: TextInputType.text,
+              controller: bairro,
               decoration: InputDecoration(
                 hintText: "Bairro",
                 icon: Icon(Icons.location_city),
@@ -115,7 +136,9 @@ class ClientePageState extends State<ClientePage> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextFormField(
+            child: TextField(
+              keyboardType: TextInputType.text,
+              controller: rua,
               decoration: InputDecoration(
                 hintText: "Rua",
                 icon: Icon(Icons.location_city),
@@ -127,7 +150,9 @@ class ClientePageState extends State<ClientePage> {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
-            child: TextFormField(
+            child: TextField(
+              keyboardType: TextInputType.number,
+              controller: n,
               decoration: InputDecoration(
                 hintText: "Nº",
                 icon: Icon(Icons.location_city),
@@ -164,12 +189,47 @@ class ClientePageState extends State<ClientePage> {
                     fontSize: 20,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  update();
+                },
               ),
             ),
           ),
         ],
       )),
+    );
+  }
+
+  void update() {
+    Firestore.instance
+        .collection("usuarios")
+        .document(this.idDocument)
+        .updateData({
+      'nome': nome.text,
+      'telefone': telefone.text,
+      'email': email.text,
+      'cidade': cidade.text,
+      'bairro': bairro.text,
+      'rua': rua.text,
+      'n': n.text
+    });
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: new Text("Dados Atualizados com Sucesso!"),
+          actions: <Widget>[
+            // define os botões na base do dialogo
+            new FlatButton(
+              child: new Text("Fechar"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

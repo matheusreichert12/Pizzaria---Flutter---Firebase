@@ -2,7 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/pages/cliente.page.dart';
-import 'package:todo/pages/pedidoCliente.page.dart';
+import 'package:todo/pages/escolherPizzaria.page.dart';
 
 class InicialClientePage extends StatefulWidget {
   InicialClientePage({this.idDocument});
@@ -17,12 +17,12 @@ class InicialClientePageState extends State<InicialClientePage> {
 
   int _pageIndex = 0;
 
-  Widget _showPage = new PedidoClientePage();
+  Widget _showPage = new EscolherPizzariaPage();
 
   Widget _pageChooser(int page) {
     switch (page) {
       case 0:
-        return PedidoClientePage();
+        return EscolherPizzariaPage();
         break;
       case 1:
         return ClientePage(idDocument: this.idDocument);

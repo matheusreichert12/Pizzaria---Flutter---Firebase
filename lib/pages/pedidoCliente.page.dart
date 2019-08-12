@@ -1,53 +1,48 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:todo/pages/cliente.page.dart';
+import 'package:todo/pages/criarConta.page.dart';
+import 'package:todo/pages/login.page.dart';
 
 class PedidoClientePage extends StatefulWidget {
   @override
   _PedidoClientePageState createState() => _PedidoClientePageState();
-}class _PedidoClientePageState extends State<PedidoClientePage> {
+}
+
+int _currentIndex = 0;
+final List<Widget> _children = [ClientePage(), LoginPage(), CriarContaPage()];
+
+class _PedidoClientePageState extends State<PedidoClientePage> {
   String teste;
-  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        title: Text("Testando FireStore"),
-      ),
-      body: new StreamBuilder(
-        stream: getData(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return new Text("Conectando...");
-          }
-
-          return new ListView.builder(
-            itemCount: snapshot.data.documents.length,
-            itemBuilder: (context, index) {
-              teste = snapshot.data.documents[index].documentID;
-              return new Text(snapshot.data.documents[index].data['login']);
-            },
-          );
-        },
-      ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: () {
-          update(teste, {'login': 'teste', 'senha': 'teste', 'adm': '1'});
-        },
-        tooltip: 'Icrement',
-        child: new Icon(Icons.add),
+      body: _children[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: onTabTapped, // new
+        currentIndex: _currentIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.fastfood),
+            title: new Text('Cardápio'),
+          ),
+          BottomNavigationBarItem(
+            icon: new Icon(Icons.attach_money),
+            title: new Text('Valores'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            title: Text('Carrinho'),
+          ),
+        ],
       ),
     );
   }
 
-  getData() {
-    return Firestore.instance.collection("usuarios").snapshots();
-  }
-
-  void update(selectDoc, newValues) {
-
-    Firestore.instance
-        .collection("usuarios")
-        .document().setData(newValues);
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
   }
 }
