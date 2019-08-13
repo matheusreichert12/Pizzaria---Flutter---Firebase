@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/pages/criarConta.page.dart';
+import 'package:todo/pages/empresa/inicialEmpresa.page.dart';
 import 'package:todo/pages/inicialCliente.page.dart';
-import 'package:todo/pages/inicialEmpresa.page.dart';
 
 class LoginPage extends StatefulWidget {
   final String title = "Login";
@@ -133,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
         .getDocuments()
         .then((QuerySnapshot docs) {
       if (docs.documents.length != 0) {
-        if (docs.documents[0].data['adm'] == '1') {
+        if (docs.documents[0].data['admin'] == 1) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => InicialEmpresaPage()));
         } else {

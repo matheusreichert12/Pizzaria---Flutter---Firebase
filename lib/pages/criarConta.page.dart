@@ -1,14 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todo/pages/login.page.dart';
-import 'package:firebase_database/firebase_database.dart';
-
-final db = FirebaseDatabase.instance.reference();
 
 class CriarContaPage extends StatelessWidget {
   final _login = TextEditingController();
   final _senha = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

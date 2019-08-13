@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:todo/pages/cardapioCliente.page.dart';
+import 'package:todo/pages/empresa/tamanhosPizzaEmpresa.page.dart';
 
-class PedidoClientePage extends StatefulWidget {
+class InicialEmpresaPage extends StatefulWidget {
   @override
-  _PedidoClientePageState createState() => _PedidoClientePageState();
+  _InicialEmpresaPageState createState() => _InicialEmpresaPageState();
 }
 
 int _currentIndex = 0;
 final List<Widget> _children = [
   CardapioClientePage(),
   CardapioClientePage(),
-  CardapioClientePage()
+  TamanhosPizzaEmpresaPage()
 ];
 
-class _PedidoClientePageState extends State<PedidoClientePage> {
-
+class _InicialEmpresaPageState extends State<InicialEmpresaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,15 +25,15 @@ class _PedidoClientePageState extends State<PedidoClientePage> {
         items: [
           BottomNavigationBarItem(
             icon: new Icon(Icons.fastfood),
-            title: new Text('Cardápio'),
+            title: new Text('Pedidos'),
           ),
           BottomNavigationBarItem(
-            icon: new Icon(Icons.attach_money),
-            title: new Text('Valores'),
+            icon: new Icon(Icons.local_pizza),
+            title: new Text('Sabores'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            title: Text('Carrinho'),
+            icon: Icon(Icons.build),
+            title: Text('Tamanhos Pizzas'),
           ),
         ],
       ),
