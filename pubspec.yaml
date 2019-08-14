@@ -21,6 +21,7 @@ dependencies:
   firebase_core: any
   curved_navigation_bar: ^0.1.26
   cloud_firestore: ^0.12.9
+  charts_flutter: ^0.6.0
   flutter:
     sdk: flutter
 
