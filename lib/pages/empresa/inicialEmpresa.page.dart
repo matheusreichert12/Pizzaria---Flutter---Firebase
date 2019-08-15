@@ -3,22 +3,38 @@ import 'package:todo/pages/cardapioCliente.page.dart';
 import 'package:todo/pages/empresa/tamanhosPizzaEmpresa.page.dart';
 
 class InicialEmpresaPage extends StatefulWidget {
+  InicialEmpresaPage({this.idDocument});
+  final String idDocument;
   @override
-  _InicialEmpresaPageState createState() => _InicialEmpresaPageState();
+  _InicialEmpresaPageState createState() =>
+      _InicialEmpresaPageState(idDocument: this.idDocument);
 }
 
-int _currentIndex = 0;
-final List<Widget> _children = [
-  CardapioClientePage(),
-  CardapioClientePage(),
-  TamanhosPizzaEmpresaPage()
-];
-
 class _InicialEmpresaPageState extends State<InicialEmpresaPage> {
+  _InicialEmpresaPageState({this.idDocument});
+  final String idDocument;
+
+  int _currentIndex = 0;
+
+  Widget _showPage = new CardapioClientePage();
+
+  Widget _pageChooser(int page) {
+    switch (page) {
+      case 0:
+        return CardapioClientePage();
+        break;
+      case 1:
+        return CardapioClientePage();
+        break;
+      default:
+        return TamanhosPizzaEmpresaPage(idDocument: this.idDocument);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _children[_currentIndex],
+      body: _showPage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped, // new
         currentIndex: _currentIndex,
@@ -43,6 +59,7 @@ class _InicialEmpresaPageState extends State<InicialEmpresaPage> {
   void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
+      _showPage = _pageChooser(index);
     });
   }
 }

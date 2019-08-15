@@ -126,6 +126,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   verificaLogin() {
+    String id = "";
     Firestore.instance
         .collection("usuarios")
         .where("login", isEqualTo: _login.text)
@@ -134,8 +135,40 @@ class _LoginPageState extends State<LoginPage> {
         .then((QuerySnapshot docs) {
       if (docs.documents.length != 0) {
         if (docs.documents[0].data['admin'] == 1) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => InicialEmpresaPage()));
+          id = docs.documents[0].documentID;
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => InicialEmpresaPage(
+                        idDocument: docs.documents[0].documentID,
+                      )));
+
+          Firestore.instance
+              .collection("empresa")
+              .where("idusuario", isEqualTo: docs.documents[0].documentID)
+              .getDocuments()
+              .then((QuerySnapshot docs) {
+            if (docs.documents.length == 0) {
+              Firestore.instance.collection("empresa").document().setData({
+                'idusuario': id,
+                'nome': '',
+                'telefone': '',
+                'cidade': '',
+                'bairro': '',
+                'rua': '',
+                'n': ''
+              });
+              Firestore.instance
+                  .collection("empresa_tamanho")
+                  .document()
+                  .setData({
+                'idusuario': id,
+                'descricao': '',
+                'quantidade_sabor': 0,
+                'pessoas': 0
+              });
+            }
+          });
         } else {
           Navigator.push(
               context,

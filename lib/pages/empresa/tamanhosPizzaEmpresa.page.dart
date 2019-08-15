@@ -1,36 +1,94 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+//import 'package:charts_flutter/flutter.dart' as charts;
 
 class TamanhosPizzaEmpresaPage extends StatefulWidget {
-  @override
-  _TamanhosPizzaEmpresaPageState createState() =>
-      _TamanhosPizzaEmpresaPageState();
+  TamanhosPizzaEmpresaPage({this.idDocument});
+  final String idDocument;
+
+  State<StatefulWidget> createState() =>
+      _TamanhosPizzaEmpresaPageState(idDocument: this.idDocument);
 }
 
 class _TamanhosPizzaEmpresaPageState extends State<TamanhosPizzaEmpresaPage> {
-  String dropdownValue = "Média";
-  int radioGroup = 2;
-  int radioGroup2 = 1;
+  _TamanhosPizzaEmpresaPageState({this.idDocument});
+   String idDocument;
 
-  String quant = "3";
-  bool _isTextFieldVisible = false;
-
-  radioEventHandler(int value) {
-    setState(() {
-      radioGroup = value;
-      _isTextFieldVisible = !_isTextFieldVisible;
-    });
-  }
-
-  radioEventHandler2(int value) {
-    setState(() {
-      radioGroup2 = value;
-    });
+  createAlertDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "Cadastro: " + this.idDocument,
+              textAlign: TextAlign.center,
+            ),
+            content: ListView(
+              children: <Widget>[
+                TextFormField(
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: "Descrição",
+                    labelStyle: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 20),
+                  ),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: "Quantidade Sabores",
+                    labelStyle: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 20),
+                  ),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: "Ideal Quant. Pessoas",
+                    labelStyle: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  "Salvar",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+                onPressed: () {},
+              ),
+              FlatButton(
+                child: new Text(
+                  "Fechar",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
-    var data = [
+    /* var data = [
+      
       Sales("1", 1, Colors.red),
       Sales("2", 1, Colors.blue),
       Sales("3", 1, Colors.yellow),
@@ -49,7 +107,7 @@ class _TamanhosPizzaEmpresaPageState extends State<TamanhosPizzaEmpresaPage> {
 
     var chart = charts.PieChart(
       series,
-      behaviors: [
+      /*behaviors: [
         new charts.DatumLegend(
           // Positions for "start" and "end" will be left and right respectively
           // for widgets with a build context that has directionality ltr.
@@ -76,24 +134,14 @@ class _TamanhosPizzaEmpresaPageState extends State<TamanhosPizzaEmpresaPage> {
               fontFamily: 'Georgia',
               fontSize: 11),
         )
-      ],
+      ],*/
      /* defaultRenderer: charts.ArcRendererConfig(
         arcRendererDecorators: [charts.ArcLabelDecorator()],
       ),*/
       animate: true,
       animationDuration: Duration(seconds: 1),
     );
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Flutter Charts"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(0),
-        child: Center(
-          child: ListView(
-            children: <Widget>[
-              Text(
+    Text(
                 "Gráfico Maroto",
                 style: TextStyle(fontSize: 30),
                 textAlign: TextAlign.center,
@@ -102,53 +150,57 @@ class _TamanhosPizzaEmpresaPageState extends State<TamanhosPizzaEmpresaPage> {
                 child: chart,
                 height: 200,
               ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                "Tamanho da pizza",
-                style: TextStyle(fontSize: 16),
-              ),
-              DropdownButton<String>(
-                value: dropdownValue,
-                onChanged: (String newValue) {
-                  setState(() {
-                    dropdownValue = newValue;
-                  });
-                },
-                items: <String>[
-                  "Broto",
-                  "Pequena",
-                  "Média",
-                  "Grande",
-                  "Família"
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value, style: TextStyle(fontSize: 13)),
-                  );
-                }).toList(),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextField(
-                keyboardType: TextInputType.number,
-                //controller: n,
-                decoration: InputDecoration(
-                  hintText: "Quantidade de Fatias",
-                  icon: Icon(Icons.local_pizza),
-                ),
-              ),
-            ],
-          ),
+    */
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.all(0),
+        child: StreamBuilder(
+          stream: Firestore.instance.collection('usuarios').snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return new Text("Loading ...");
+            }
+            return new ListView(
+              children: snapshot.data.documents.map((document) {
+                return new Card(
+                  child: new Column(
+                    children: <Widget>[
+                      new ListTile(
+                        leading: SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: Image.asset(
+                            "assets/icone.png",
+                            color: Colors.red,
+                          ),
+                        ),
+                        // title: new Text(document['login']),
+                        title: new Text("Média"),
+                        //subtitle: new Text(document['senha']),
+                        subtitle: new Text("Sabores: 2, Ideal para 2 pessoas"),
+                      ),
+                    ],
+                  ),
+                  //title: new Text(document['login']),
+                  //subtitle: new Text(document['senha']),
+                );
+              }).toList(),
+            );
+          },
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          createAlertDialog(context);
+        },
       ),
     );
   }
 }
 
-class Sales {
+/*class Sales {
   final String day;
   final int sold;
   final charts.Color color;
@@ -157,3 +209,4 @@ class Sales {
       : this.color = charts.Color(
             r: color.red, g: color.green, b: color.blue, a: color.alpha);
 }
+*/
