@@ -26,8 +26,16 @@ class _InicialEmpresaPageState extends State<InicialEmpresaPage> {
       case 1:
         return CardapioClientePage();
         break;
-      default:
+      case 2:
         return TamanhosPizzaEmpresaPage(idDocument: this.idDocument);
+        break;
+      case 3:
+        return CardapioClientePage();
+        break;
+      default:
+        return new Container(
+          child: Text("Página não encontrada"),
+        );
     }
   }
 
@@ -38,18 +46,40 @@ class _InicialEmpresaPageState extends State<InicialEmpresaPage> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped, // new
         currentIndex: _currentIndex,
+        elevation: 5,
         items: [
           BottomNavigationBarItem(
-            icon: new Icon(Icons.fastfood),
-            title: new Text('Pedidos'),
+            icon: new Icon(
+              Icons.fastfood,
+              color: Colors.redAccent,
+            ),
+            title: new Text(
+              'Pedidos',
+              style: TextStyle(
+                color: Colors.redAccent,
+              ),
+            ),
           ),
           BottomNavigationBarItem(
-            icon: new Icon(Icons.local_pizza),
-            title: new Text('Sabores'),
+            icon: new Icon(Icons.local_pizza, color: Colors.redAccent),
+            title: new Text('Sabores',
+              style: TextStyle(
+                color: Colors.redAccent,
+              ),),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.build),
-            title: Text('Tamanhos Pizzas'),
+            icon: Icon(Icons.build, color: Colors.redAccent),
+            title: Text('Tamanhos Pizzas',
+              style: TextStyle(
+                color: Colors.redAccent,
+              ),),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.info, color: Colors.redAccent),
+            title: Text('Dados Empresa',
+              style: TextStyle(
+                color: Colors.redAccent,
+              ),),
           ),
         ],
       ),

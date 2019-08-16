@@ -38,8 +38,6 @@ class ClientePageState extends State<ClientePage> {
         bairro.text = docs.data['bairro'];
         rua.text = docs.data['rua'];
         n.text = docs.data['n'];
-
-        //adicionar os outros campos
       }
     });
   }

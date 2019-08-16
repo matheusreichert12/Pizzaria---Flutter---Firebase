@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
+
 //import 'package:charts_flutter/flutter.dart' as charts;
 
 class TamanhosPizzaEmpresaPage extends StatefulWidget {
@@ -12,21 +14,31 @@ class TamanhosPizzaEmpresaPage extends StatefulWidget {
 
 class _TamanhosPizzaEmpresaPageState extends State<TamanhosPizzaEmpresaPage> {
   _TamanhosPizzaEmpresaPageState({this.idDocument});
-   String idDocument;
+  String idDocument;
+
+  var controllerLista = new MoneyMaskedTextController(leftSymbol: 'R\$ ');
 
   createAlertDialog(BuildContext context) {
+    var valor = new MoneyMaskedTextController(
+        decimalSeparator: ',', thousandSeparator: '.');
+
+    final descricao = TextEditingController();
+    final quantSabor = TextEditingController();
+    final quantPess = TextEditingController();
+
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: Text(
-              "Cadastro: " + this.idDocument,
+              "Cadastro",
               textAlign: TextAlign.center,
             ),
             content: ListView(
               children: <Widget>[
                 TextFormField(
                   keyboardType: TextInputType.text,
+                  controller: descricao,
                   decoration: InputDecoration(
                     labelText: "Descrição",
                     labelStyle: TextStyle(
@@ -37,6 +49,7 @@ class _TamanhosPizzaEmpresaPageState extends State<TamanhosPizzaEmpresaPage> {
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
+                  controller: quantSabor,
                   decoration: InputDecoration(
                     labelText: "Quantidade Sabores",
                     labelStyle: TextStyle(
@@ -47,8 +60,20 @@ class _TamanhosPizzaEmpresaPageState extends State<TamanhosPizzaEmpresaPage> {
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
+                  controller: quantPess,
                   decoration: InputDecoration(
                     labelText: "Ideal Quant. Pessoas",
+                    labelStyle: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 20),
+                  ),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: valor,
+                  decoration: InputDecoration(
+                    labelText: "Valor",
                     labelStyle: TextStyle(
                         color: Colors.black38,
                         fontWeight: FontWeight.w400,
@@ -66,7 +91,156 @@ class _TamanhosPizzaEmpresaPageState extends State<TamanhosPizzaEmpresaPage> {
                     fontSize: 24,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  salvarTamanho(descricao, quantSabor, quantPess, valor);
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
+                child: new Text(
+                  "Fechar",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  salvarTamanho(descricao, quantSabor, quantPess, valor) {
+    Firestore.instance.collection("empresa_tamanho").document().setData({
+      'idusuario': this.idDocument,
+      'descricao': descricao.text,
+      'quantidade_sabor': int.parse(quantSabor.text),
+      'pessoas': int.parse(quantPess.text),
+      'valor': double.parse(valor.text.replaceAll(".", "").replaceAll(",", "."))
+    });
+  }
+
+  alterarTamanho(id, descricao, quantSabor, quantPess, valor) {
+    Firestore.instance
+        .collection("empresa_tamanho")
+        .document(id)
+        .updateData({
+      'descricao': descricao.text,
+      'quantidade_sabor': int.parse(quantSabor.text),
+      'pessoas': int.parse(quantPess.text),
+      'valor': double.parse(valor.text.replaceAll(".", "").replaceAll(",", "."))
+    });
+  }
+
+  abrirTela(String id, descricao, quantSabor, quantPess, valor) {
+    Firestore.instance
+        .collection("empresa_tamanho")
+        .document(id)
+        .snapshots()
+        .forEach((DocumentSnapshot docs) {
+      if (docs.data.length != 0) {
+        descricao.text = docs.data['descricao'];
+        quantSabor.text = docs.data['quantidade_sabor'].toString();
+        quantPess.text = docs.data['pessoas'].toString();
+        var formata = docs.data['valor']
+            .toString()
+            .replaceAll(".09", ",09")
+            .replaceAll(".08", ",08")
+            .replaceAll(".07", ",07")
+            .replaceAll(".06", ",06")
+            .replaceAll(".05", ",05")
+            .replaceAll(".04", ",04")
+            .replaceAll(".03", ",03")
+            .replaceAll(".02", ",02")
+            .replaceAll(".01", ",01")
+            .replaceAll(".0", ",00");
+
+        valor.text = formata;
+      }
+    });
+  }
+
+  updateAlertDialog(BuildContext context, String id) {
+    var valor = new MoneyMaskedTextController(
+        decimalSeparator: ',', thousandSeparator: '.');
+
+    final descricao = TextEditingController();
+    final quantSabor = TextEditingController();
+    final quantPess = TextEditingController();
+
+    abrirTela(id, descricao, quantSabor, quantPess, valor);
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "Alteração",
+              textAlign: TextAlign.center,
+            ),
+            content: ListView(
+              children: <Widget>[
+                TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: descricao,
+                  decoration: InputDecoration(
+                    labelText: "Descrição",
+                    labelStyle: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 20),
+                  ),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: quantSabor,
+                  decoration: InputDecoration(
+                    labelText: "Quantidade Sabores",
+                    labelStyle: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 20),
+                  ),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.number,
+                  controller: quantPess,
+                  decoration: InputDecoration(
+                    labelText: "Ideal Quant. Pessoas",
+                    labelStyle: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 20),
+                  ),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.text,
+                  controller: valor,
+                  decoration: InputDecoration(
+                    labelText: "Valor",
+                    labelStyle: TextStyle(
+                        color: Colors.black38,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 20),
+                  ),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(
+                  "Salvar",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+                onPressed: () {
+                  alterarTamanho(id, descricao, quantSabor, quantPess, valor);
+                  Navigator.of(context).pop();
+                },
               ),
               FlatButton(
                 child: new Text(
@@ -151,11 +325,15 @@ class _TamanhosPizzaEmpresaPageState extends State<TamanhosPizzaEmpresaPage> {
                 height: 200,
               ),
     */
+
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(0),
         child: StreamBuilder(
-          stream: Firestore.instance.collection('usuarios').snapshots(),
+          stream: Firestore.instance
+              .collection('empresa_tamanho')
+              .where("idusuario", isEqualTo: this.idDocument)
+              .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) {
@@ -163,10 +341,14 @@ class _TamanhosPizzaEmpresaPageState extends State<TamanhosPizzaEmpresaPage> {
             }
             return new ListView(
               children: snapshot.data.documents.map((document) {
+                controllerLista.updateValue(document['valor']);
                 return new Card(
                   child: new Column(
                     children: <Widget>[
                       new ListTile(
+                        onTap: () {
+                          updateAlertDialog(context, document.documentID);
+                        },
                         leading: SizedBox(
                           width: 50,
                           height: 50,
@@ -175,10 +357,19 @@ class _TamanhosPizzaEmpresaPageState extends State<TamanhosPizzaEmpresaPage> {
                             color: Colors.red,
                           ),
                         ),
-                        // title: new Text(document['login']),
-                        title: new Text("Média"),
-                        //subtitle: new Text(document['senha']),
-                        subtitle: new Text("Sabores: 2, Ideal para 2 pessoas"),
+                        title: new Text(
+                          document['descricao'] +
+                              "        " +
+                              controllerLista.text,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        //title: new Text("Média"),
+                        subtitle: new Text("Sabores: " +
+                            document['quantidade_sabor'].toString() +
+                            ", ideal para " +
+                            document['pessoas'].toString() +
+                            " pessoas"),
+                        //subtitle: new Text("Sabores: 2, Ideal para 2 pessoas"),
                       ),
                     ],
                   ),

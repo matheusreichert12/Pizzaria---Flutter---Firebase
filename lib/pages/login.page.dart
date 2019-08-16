@@ -165,7 +165,8 @@ class _LoginPageState extends State<LoginPage> {
                 'idusuario': id,
                 'descricao': '',
                 'quantidade_sabor': 0,
-                'pessoas': 0
+                'pessoas': 0,
+                'valor': double.parse("0,00")
               });
             }
           });
