@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:todo/pages/cardapioCliente.page.dart';
+import 'package:todo/pages/empresa/dadosEmpresa.page.dart';
 import 'package:todo/pages/empresa/tamanhosPizzaEmpresa.page.dart';
 
 class InicialEmpresaPage extends StatefulWidget {
-  InicialEmpresaPage({this.idDocument});
+  InicialEmpresaPage({this.idDocument, this.idEmpresa});
   final String idDocument;
+  final String idEmpresa;
   @override
-  _InicialEmpresaPageState createState() =>
-      _InicialEmpresaPageState(idDocument: this.idDocument);
+  _InicialEmpresaPageState createState() => _InicialEmpresaPageState(
+      idDocument: this.idDocument, idEmpresa: this.idEmpresa);
 }
 
 class _InicialEmpresaPageState extends State<InicialEmpresaPage> {
-  _InicialEmpresaPageState({this.idDocument});
+  _InicialEmpresaPageState({this.idDocument, this.idEmpresa});
   final String idDocument;
+  final String idEmpresa;
 
   int _currentIndex = 0;
 
@@ -30,7 +33,10 @@ class _InicialEmpresaPageState extends State<InicialEmpresaPage> {
         return TamanhosPizzaEmpresaPage(idDocument: this.idDocument);
         break;
       case 3:
-        return CardapioClientePage();
+        return DadosEmpresaPage(
+          idDocument: this.idDocument,
+          idEmpresa: this.idEmpresa,
+        );
         break;
       default:
         return new Container(
@@ -62,24 +68,30 @@ class _InicialEmpresaPageState extends State<InicialEmpresaPage> {
           ),
           BottomNavigationBarItem(
             icon: new Icon(Icons.local_pizza, color: Colors.redAccent),
-            title: new Text('Sabores',
+            title: new Text(
+              'Sabores',
               style: TextStyle(
                 color: Colors.redAccent,
-              ),),
+              ),
+            ),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.build, color: Colors.redAccent),
-            title: Text('Tamanhos Pizzas',
+            title: Text(
+              'Tamanhos Pizzas',
               style: TextStyle(
                 color: Colors.redAccent,
-              ),),
+              ),
+            ),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.info, color: Colors.redAccent),
-            title: Text('Dados Empresa',
+            title: Text(
+              'Dados Empresa',
               style: TextStyle(
                 color: Colors.redAccent,
-              ),),
+              ),
+            ),
           ),
         ],
       ),

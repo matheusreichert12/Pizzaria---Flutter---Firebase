@@ -136,19 +136,13 @@ class _LoginPageState extends State<LoginPage> {
       if (docs.documents.length != 0) {
         if (docs.documents[0].data['admin'] == 1) {
           id = docs.documents[0].documentID;
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => InicialEmpresaPage(
-                        idDocument: docs.documents[0].documentID,
-                      )));
 
           Firestore.instance
               .collection("empresa")
               .where("idusuario", isEqualTo: docs.documents[0].documentID)
               .getDocuments()
-              .then((QuerySnapshot docs) {
-            if (docs.documents.length == 0) {
+              .then((QuerySnapshot docs2) {
+            if (docs2.documents.length == 0) {
               Firestore.instance.collection("empresa").document().setData({
                 'idusuario': id,
                 'nome': '',
@@ -168,6 +162,26 @@ class _LoginPageState extends State<LoginPage> {
                 'pessoas': 0,
                 'valor': double.parse("0,00")
               });
+
+              Firestore.instance
+                  .collection("empresa")
+                  .where("idusuario", isEqualTo: docs.documents[0].documentID)
+                  .getDocuments()
+                  .then((QuerySnapshot docs3) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => InicialEmpresaPage(
+                            idDocument: docs.documents[0].documentID,
+                            idEmpresa: docs3.documents[0].documentID)));
+              });
+            } else {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => InicialEmpresaPage(
+                          idDocument: docs.documents[0].documentID,
+                          idEmpresa: docs2.documents[0].documentID)));
             }
           });
         } else {
